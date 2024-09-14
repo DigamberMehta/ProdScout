@@ -280,17 +280,20 @@ async function getProductRecommendations(answers) {
 
 // 7. Function to summarize the product need
 async function summarizeProductNeed(productType, answers) {
-  const content = `Summarize the product need for a ${productType} based on the following answers: ${JSON.stringify(
+  const content = `🔍 Please provide a clear and concise summary of the user's needs for a ${productType} based on the following answers: ${JSON.stringify(
     answers
-  )}`;
+  )}. Use emojis to make it more engaging and easier to understand.`;
+
   const data = await sendToGeminiAPI(content);
 
   if (data && data.candidates && data.candidates.length > 0) {
-    return data.candidates[0].content.parts[0].text;
+    const summary = data.candidates[0].content.parts[0].text;
+    return summary || "🔍 No summary available.";
   }
 
-  return "No summary available.";
+  return "🔍 No summary available.";
 }
+
 
 // Main Routes
 

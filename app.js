@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Mongoose connection
-const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/ProdFinder";
+const dbUrl = process.env.DB_URL || "mongodb+srv://digambermehta2603:AuelLSKJHHohPw60@cluster0.brpld.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 console.log(dbUrl);
 main()
   .then(() => console.log("Connected to MongoDB"))

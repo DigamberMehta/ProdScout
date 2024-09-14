@@ -243,21 +243,22 @@ async function sendToGeminiAPI(content) {
 }
 
 // 5. Function to get follow-up questions
-async function getFollowUpQuestions(productType) {
-  const content = `Ask up to 5 follow-up questions for the product type: ${productType}`;
+async function getPurchaseParameters(productType) {
+  const content = `Please provide the most important parameters or factors to consider when buying a ${productType}. List up to 5 key considerations.`;
   const data = await sendToGeminiAPI(content);
 
   if (data && data.candidates && data.candidates.length > 0) {
     const candidate = data.candidates[0];
-    const followUpQuestions = candidate.content.parts[0].text
+    const parameters = candidate.content.parts[0].text
       .split("\n")
       .filter((line) => line.trim() !== "")
       .slice(0, 5);
-    return followUpQuestions;
+    return parameters;
   }
 
   return [];
 }
+
 
 // 6. Function to get product recommendations
 async function getProductRecommendations(answers) {

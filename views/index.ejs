@@ -4,95 +4,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Chatbot</title>
+    <title>ProdScout - Product Chatbot</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #1e3a5f, #1e1e1e);
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: #1e1e1e;
             color: #ffffff;
         }
 
         .container {
-            background-color: #1f2629;
-            padding: 40px;
+            background-color: #2c3e50;
+            padding: 50px;
             border-radius: 10px;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
             text-align: center;
-            width: 70%;
+            max-width: 500px;
+            width: 100%;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         h1 {
-            font-size: 30px;
-            margin-bottom: 25px;
-            color: #4c8297;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #4fc3f7;
         }
 
         label {
             font-size: 18px;
-            color: #4c8297;
+            color: #b0bec5;
+            margin-bottom: 10px;
         }
 
         input[type="text"] {
             padding: 15px;
             border: 2px solid #616161;
-            background-color: #2a2f37;
+            background-color: #34495e;
             color: #ffffff;
             border-radius: 5px;
             font-size: 16px;
             outline: none;
-            transition: border-color 0.3s;
+            transition: border-color 0.3s ease-in-out;
         }
 
         input[type="text"]:focus {
-            border-color: #4c8297;
+            border-color: #4fc3f7;
         }
 
         button {
-            padding: 15px;
-            background-color: #4c8297;
+            padding: 15px 30px;
+            background-color: #4fc3f7;
             color: white;
             border: none;
             border-radius: 5px;
-            cursor: pointer;
             font-size: 16px;
-            transition: background-color 0.3s;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease-in-out;
         }
 
         button:hover {
-            background-color: #366b79;
+            background-color: #35a1d1;
+        }
+
+        .icon {
+            margin-top: 20px;
+            font-size: 40px;
+            color: #4fc3f7;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 576px) {
+            .container {
+                padding: 30px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 12px 20px;
+            }
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>Welcome to Product Chatbot</h1>
+        <h1>Welcome to ProdScout</h1>
+        <p class="mb-4">Find the exact product that suits your needs!</p>
         <form id="product-form">
             <label for="product-name">Enter Product Name:</label>
-            <input type="text" id="product-name" name="product-name" required>
-            <button type="submit">Start</button>
+            <input type="text" id="product-name" name="product-name" placeholder="e.g., iPhone 13" required>
+            <button type="submit">
+                <i class="fas fa-search"></i> Start
+            </button>
         </form>
+        <i class="fas fa-robot icon"></i>
     </div>
 
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <!-- Form Submission Script -->
     <script>
-        document.getElementById('product-form').addEventListener('submit', (e) => {
+        document.getElementById('product-form').addEventListener('submit', function (e) {
             e.preventDefault();
-            const productName = document.getElementById('product-name').value;
+            const productName = document.getElementById('product-name').value.trim();
 
-            // Redirect to the /questions page with productName as a query parameter
-            window.location.href = `/questions?productName=${encodeURIComponent(productName)}`;
+            if (productName) {
+                // Redirect to the /questions page with the product name
+                window.location.href = `/questions?productName=${encodeURIComponent(productName)}`;
+            } else {
+                alert('Please enter a product name.');
+            }
         });
     </script>
 </body>

@@ -293,7 +293,7 @@ async function summarizeProductNeed(productType, answers) {
 
 // Main Routes
 
-app.get('/', (req, res) => {
+app.get('/', isLoggedIn,(req, res) => {
   res.render('index');
 });
 

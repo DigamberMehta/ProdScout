@@ -73,21 +73,27 @@
 <body>
     <div class="container">
         <h2>Answer the following questions about your product:</h2>
-        <div id="questions-container"></div>
-        <div id="response-container"></div>
+        <div id="question-container"></div>
+        <button id="next-btn" style="display:none;">Next Question</button>
+        <div id="submit-container" style="display:none;">
+            <button id="submit-btn">Submit Answers</button>
+        </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
-            const questionsContainer = document.getElementById('questions-container');
-            const responseContainer = document.getElementById('response-container');
+            const questionContainer = document.getElementById('question-container');
+            const nextBtn = document.getElementById('next-btn');
+            const submitContainer = document.getElementById('submit-container');
+            const submitBtn = document.getElementById('submit-btn');
             let answers = {};
+            let currentQuestionIndex = 0;
 
             // Get the product name from the URL query parameter
             const urlParams = new URLSearchParams(window.location.search);
             const productName = urlParams.get('productName');
 
             if (!productName) {
-                questionsContainer.innerHTML = '<p>Error: Product name not provided!</p>';
+                questionContainer.innerHTML = '<p>Error: Product name not provided!</p>';
                 return;
             }
 
@@ -102,22 +108,41 @@
 
             const { questions } = await response.json();
 
-            questions.forEach((question, index) => {
-                const questionEl = document.createElement('p');
-                questionEl.innerText = question;
-                questionsContainer.appendChild(questionEl);
+            // Function to display a question
+            function displayQuestion(index) {
+                questionContainer.innerHTML = `
+                    <p>${questions[index]}</p>
+                    <input type="text" id="answer-input" placeholder="Your answer" required>
+                `;
+                nextBtn.style.display = 'block';  // Show the next button
+            }
 
-                const inputEl = document.createElement('input');
-                inputEl.type = 'text';
-                inputEl.addEventListener('change', (e) => {
-                    answers[question] = e.target.value;
-                });
-                questionsContainer.appendChild(inputEl);
+            // Display the first question initially
+            displayQuestion(currentQuestionIndex);
+
+            // Move to the next question when Next button is clicked
+            nextBtn.addEventListener('click', () => {
+                const answerInput = document.getElementById('answer-input').value;
+                if (!answerInput) {
+                    alert('Please provide an answer before proceeding.');
+                    return;
+                }
+                // Save the current answer
+                answers[questions[currentQuestionIndex]] = answerInput;
+                currentQuestionIndex++;
+
+                // If we have more questions, show the next one
+                if (currentQuestionIndex < questions.length) {
+                    displayQuestion(currentQuestionIndex);
+                } else {
+                    // All questions have been answered, show the submit button
+                    nextBtn.style.display = 'none';
+                    submitContainer.style.display = 'block';
+                }
             });
 
-            const submitButton = document.createElement('button');
-            submitButton.innerText = 'Submit Answers';
-            submitButton.addEventListener('click', async () => {
+            // Submit the answers when Submit button is clicked
+            submitBtn.addEventListener('click', async () => {
                 // Post the answers to the /recommendations endpoint
                 const recommendationResponse = await fetch('/recommendations', {
                     method: 'POST',
@@ -133,7 +158,6 @@
                 // Redirect to the recommendations page after receiving the recommendations
                 window.location.href = `/recommendations?recommendations=${encodeURIComponent(JSON.stringify(recommendations))}`;
             });
-            responseContainer.appendChild(submitButton);
         });
     </script>
 </body>

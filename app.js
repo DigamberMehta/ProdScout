@@ -243,7 +243,7 @@ async function sendToGeminiAPI(content) {
 }
 
 // 5. Function to get follow-up questions
-async function getPurchaseParameters(productType) {
+async function getFollowUpQuestions(productType) {
   const content = `Please provide the most important parameters or factors to consider when buying a ${productType}. List up to 5 key considerations.`;
   const data = await sendToGeminiAPI(content);
 

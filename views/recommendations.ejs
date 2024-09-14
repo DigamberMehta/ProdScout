@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Recommendations</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #e0f7fa, #80deea, #26c6da);
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h2 {
+            color: #006064;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        #recommendations-container {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        div {
+            margin-bottom: 15px;
+        }
+
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        label {
+            font-size: 18px;
+            color: #004d40;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #006064;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #004d40;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Product Recommendations:</h2>
+        <form id="product-selection-form" action="/results" method="POST">
+            <div id="recommendations-container">
+                <% recommendations.forEach((recommendation, index) => { %>
+                    <div>
+                        <input type="radio" id="product-<%= index %>" name="selectedProduct" value="<%= recommendation %>" required>
+                        <label for="product-<%= index %>"><%= recommendation %></label>
+                    </div>
+                <% }) %>
+            </div>
+            <button type="submit">Submit Selected Product</button>
+        </form>
+    </div>
+</body>
+</html>

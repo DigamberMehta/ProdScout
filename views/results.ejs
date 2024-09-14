@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Verdict</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2, #ffcc80);
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 700px;
+        }
+
+        h2 {
+            color: #e65100;
+            margin-bottom: 10px;
+            font-size: 24px;
+            border-bottom: 2px solid #ffab40;
+            padding-bottom: 5px;
+        }
+
+        p {
+            font-size: 18px;
+            color: #4e342e;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .container p:last-of-type {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Amazon Review:</h2>
+        <p><%= reviewAmazon %></p>
+
+        <h2>Internet Shopping Review:</h2>
+        <p><%= reviewInternetShopping %></p>
+
+        <h2>Final Verdict:</h2>
+        <p><%= finalVerdict %></p>
+
+        <h2>Summary of Product Need:</h2>
+        <p><%= summary %></p>
+    </div>
+</body>
+</html>

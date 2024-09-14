@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Questions</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #e1bee7, #ce93d8, #ba68c8);
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h2 {
+            color: #6a1b9a;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        p {
+            font-size: 18px;
+            color: #4a148c;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #ba68c8;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #6a1b9a;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #6a1b9a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #4a148c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Answer the following questions about your product:</h2>
+        <div id="questions-container"></div>
+        <div id="response-container"></div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const questionsContainer = document.getElementById('questions-container');
+            const responseContainer = document.getElementById('response-container');
+            let answers = {};
+
+            // Get the product name from the URL query parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const productName = urlParams.get('productName');
+
+            if (!productName) {
+                questionsContainer.innerHTML = '<p>Error: Product name not provided!</p>';
+                return;
+            }
+
+            // Fetch the questions from the server with the productName
+            const response = await fetch('/questions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ productName }), // Use the dynamic product name
+            });
+
+            const { questions } = await response.json();
+
+            questions.forEach((question, index) => {
+                const questionEl = document.createElement('p');
+                questionEl.innerText = question;
+                questionsContainer.appendChild(questionEl);
+
+                const inputEl = document.createElement('input');
+                inputEl.type = 'text';
+                inputEl.addEventListener('change', (e) => {
+                    answers[question] = e.target.value;
+                });
+                questionsContainer.appendChild(inputEl);
+            });
+
+            const submitButton = document.createElement('button');
+            submitButton.innerText = 'Submit Answers';
+            submitButton.addEventListener('click', async () => {
+                // Post the answers to the /recommendations endpoint
+                const recommendationResponse = await fetch('/recommendations', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ answers }),
+                });
+
+                // Wait for the response containing the recommendations
+                const { recommendations } = await recommendationResponse.json();
+
+                // Redirect to the recommendations page after receiving the recommendations
+                window.location.href = `/recommendations?recommendations=${encodeURIComponent(JSON.stringify(recommendations))}`;
+            });
+            responseContainer.appendChild(submitButton);
+        });
+    </script>
+</body>
+</html>
